@@ -91,7 +91,7 @@ function localKey(month) {
 function htmlToPreview(html) {
   const div = document.createElement('div');
   div.innerHTML = html || '';
-  return div.textContent.trim() || '点击填写今日工作内容';
+  return div.textContent.trim();
 }
 
 async function loadMonthRecords() {
