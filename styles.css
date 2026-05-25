@@ -170,6 +170,15 @@ h1 {
   -webkit-box-orient: vertical;
   word-break: break-word;
 }
+.day-preview mark[data-color="yellow"] { background: #fff0a8; }
+.day-preview mark[data-color="green"] { background: #d7f2d8; }
+.day-preview mark[data-color="blue"] { background: #d9eaff; }
+.day-preview mark[data-color="pink"] { background: #ffe0ea; }
+.day-preview mark {
+  border-radius: 4px;
+  padding: 0 2px;
+  color: inherit;
+}
 
 .editor-card {
   position: sticky;
