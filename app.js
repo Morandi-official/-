@@ -89,9 +89,48 @@ function localKey(month) {
 }
 
 function htmlToPreview(html) {
-  const div = document.createElement('div');
-  div.innerHTML = html || '';
-  return div.textContent.trim();
+  const source = document.createElement('div');
+  source.innerHTML = html || '';
+
+  if (!source.textContent.trim()) return '';
+
+  const allowedColors = new Set(['yellow', 'green', 'blue', 'pink']);
+  const preview = document.createElement('div');
+
+  function copySafe(node, target) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      target.append(document.createTextNode(node.textContent));
+      return;
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+    const tag = node.tagName.toLowerCase();
+
+    if (tag === 'br') {
+      target.append(document.createElement('br'));
+      return;
+    }
+
+    if (tag === 'mark' && allowedColors.has(node.dataset.color)) {
+      const mark = document.createElement('mark');
+      mark.dataset.color = node.dataset.color;
+      node.childNodes.forEach((child) => copySafe(child, mark));
+      target.append(mark);
+      return;
+    }
+
+    if (tag === 'div' || tag === 'p') {
+      if (target.childNodes.length) target.append(document.createElement('br'));
+      node.childNodes.forEach((child) => copySafe(child, target));
+      return;
+    }
+
+    node.childNodes.forEach((child) => copySafe(child, target));
+  }
+
+  source.childNodes.forEach((child) => copySafe(child, preview));
+  return preview.innerHTML;
 }
 
 async function loadMonthRecords() {
@@ -188,7 +227,7 @@ function renderCalendar() {
     node.classList.toggle('selected', isSameDate(date, selectedDate));
     node.classList.add(cycleIndex(date) % 2 === 0 ? 'cycle-a' : 'cycle-b');
     node.querySelector('.day-number').textContent = date.getDate();
-    node.querySelector('.day-preview').textContent = htmlToPreview(records.get(dateKey));
+    node.querySelector('.day-preview').innerHTML = htmlToPreview(records.get(dateKey));
     node.addEventListener('click', () => selectDate(date));
     els.calendarGrid.append(node);
   }
@@ -196,7 +235,7 @@ function renderCalendar() {
 
 function updateDayPreview(dateKey, content) {
   const cell = els.calendarGrid.querySelector(`[data-date="${dateKey}"]`);
-  if (cell) cell.querySelector('.day-preview').textContent = htmlToPreview(content);
+  if (cell) cell.querySelector('.day-preview').innerHTML = htmlToPreview(content);
 }
 
 function selectDate(date) {
