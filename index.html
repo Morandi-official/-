@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WorkCycle</title>
+  <link rel="stylesheet" href="/styles.css?v=1" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <p class="eyebrow">WorkCycle</p>
+      <h1>月度工作记录</h1>
+      <p class="subtitle">以月为尺度记录每日工作；周四至下周三为一个周期，周三为汇报日。</p>
+    </header>
+
+    <section class="toolbar" aria-label="月份控制">
+      <button id="prevMonth" class="soft-button" type="button">← 上个月</button>
+      <div class="month-title-wrap">
+        <h2 id="monthTitle">加载中…</h2>
+        <p id="cycleHint">每个浅色块代表一个周四到下周三的工作周期</p>
+      </div>
+      <button id="nextMonth" class="soft-button" type="button">下个月 →</button>
+    </section>
+
+    <section class="legend" aria-label="图例">
+      <span><i class="dot dot-report"></i>周三汇报日</span>
+      <span><i class="dot dot-cycle-a"></i>工作周期 A</span>
+      <span><i class="dot dot-cycle-b"></i>工作周期 B</span>
+      <span><i class="dot dot-today"></i>今天</span>
+    </section>
+
+    <section class="calendar-card">
+      <div class="weekdays" aria-hidden="true">
+        <span>周一</span><span>周二</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span>
+      </div>
+      <div id="calendarGrid" class="calendar-grid" aria-label="月度日历"></div>
+    </section>
+
+    <section class="editor-card" aria-label="每日记录编辑器">
+      <div class="editor-head">
+        <div>
+          <p class="eyebrow small">Selected Day</p>
+          <h2 id="selectedDateTitle">请选择日期</h2>
+        </div>
+        <span id="saveStatus" class="save-status">准备就绪</span>
+      </div>
+
+      <div class="highlight-tools" aria-label="荧光标注工具">
+        <button class="mark-button mark-yellow" data-color="yellow" type="button">黄色荧光</button>
+        <button class="mark-button mark-green" data-color="green" type="button">绿色荧光</button>
+        <button class="mark-button mark-blue" data-color="blue" type="button">蓝色荧光</button>
+        <button class="mark-button mark-pink" data-color="pink" type="button">粉色荧光</button>
+        <button id="clearFormat" class="mark-button" type="button">清除格式</button>
+      </div>
+
+      <div id="editor" class="editor" contenteditable="true" aria-label="输入每日工作内容" data-placeholder="在这里记录今天做了什么。选中文字后点击上方按钮，可以添加不同颜色的荧光标注。"></div>
+
+      <div class="editor-actions">
+        <p>记录会自动保存。云端未配置时会保存到当前浏览器本地。</p>
+        <button id="saveNow" class="primary-button" type="button">立即保存</button>
+      </div>
+    </section>
+  </main>
+
+  <template id="dayTemplate">
+    <button class="day-cell" type="button">
+      <div class="day-topline">
+        <span class="day-number"></span>
+        <span class="report-badge">汇报</span>
+      </div>
+      <div class="day-preview"></div>
+    </button>
+  </template>
+
+  <script src="/app.js?v=1" defer></script>
+</body>
+</html>
